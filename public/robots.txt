@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://srirajaganapathilogistics.example.com/sitemap.xml
