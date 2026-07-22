@@ -8,7 +8,9 @@ import {
   Divider,
   Link as MuiLink,
 } from '@mui/material';
-import { FaInstagram, FaLinkedin, FaWhatsapp } from 'react-icons/fa6';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import { FaInstagram, FaLinkedin, FaWhatsapp, FaCode, FaGithub } from 'react-icons/fa6';
 import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 
 import Logo from '../common/Logo.jsx';
@@ -131,6 +133,8 @@ export default function Footer() {
             <FooterLink href="#contact" muted>Support</FooterLink>
           </Stack>
         </Stack>
+
+        <DeveloperCredit />
       </Container>
     </Box>
   );
@@ -209,5 +213,117 @@ function SocialBtn({ href, label, children }) {
     >
       {children}
     </IconButton>
+  );
+}
+
+function DeveloperCredit() {
+  const theme = useTheme();
+  const accent = theme.palette.secondary.main;
+  const developer = {
+    name: 'Anand P',
+    linkedin: 'https://www.linkedin.com/in/anand-p-299182228/',
+    github: 'https://github.com/ItsPAnand',
+  };
+
+  return (
+    <Stack
+      direction={{ xs: 'column', md: 'row' }}
+      justifyContent="space-between"
+      alignItems={{ xs: 'center', md: 'center' }}
+      spacing={2}
+      sx={{
+        color: 'rgba(255,255,255,0.78)',
+        fontSize: 14.5,
+        textAlign: { xs: 'center', md: 'right' },
+        pb: { xs: 4, md: 0 },
+      }}
+    >
+      <Box
+        component={motion.div}
+        whileHover={{ y: -2 }}
+        transition={{ duration: 0.24, ease: 'easeOut' }}
+        sx={{ width: '100%' }}
+      >
+        <MuiLink
+          href={developer.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          underline="none"
+          aria-label="Designed and developed by Anand P on LinkedIn"
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: { xs: 'center', md: 'flex-end' },
+            gap: 1,
+            color: 'inherit',
+            fontWeight: 500,
+            transition: 'color 240ms ease',
+            position: 'relative',
+            '&:hover': { color: '#fff' },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              left: 0,
+              bottom: -2,
+              width: '100%',
+              height: 1,
+              background: accent,
+              transform: 'scaleX(0)',
+              transformOrigin: 'left',
+              opacity: 0,
+              transition: 'transform 240ms ease, opacity 240ms ease',
+            },
+            '&:hover::after': {
+              transform: 'scaleX(1)',
+              opacity: 1,
+            },
+          }}
+        >
+          <Box component={FaCode} sx={{ color: accent, fontSize: 16 }} />
+          Crafted with ❤️ by {developer.name}
+        </MuiLink>
+      </Box>
+
+      <Stack direction="row" spacing={1} sx={{ justifyContent: { xs: 'center', md: 'flex-end' } }}>
+        <IconButton
+          component={motion.a}
+          href={developer.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn profile for Anand P"
+          whileHover={{ y: -2, scale: 1.05 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+          sx={{
+            color: 'rgba(255,255,255,0.78)',
+            border: '1px solid rgba(255,255,255,0.14)',
+            width: 38,
+            height: 38,
+            '&:hover': { color: '#fff', borderColor: accent, background: 'rgba(245,166,35,0.08)' },
+          }}
+        >
+          <FaLinkedin />
+        </IconButton>
+        <IconButton
+          component={motion.a}
+          href={developer.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub profile for Anand P"
+          whileHover={{ y: -2, scale: 1.05 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+          sx={{
+            color: 'rgba(255,255,255,0.78)',
+            border: '1px solid rgba(255,255,255,0.14)',
+            width: 38,
+            height: 38,
+            '&:hover': { color: '#fff', borderColor: accent, background: 'rgba(245,166,35,0.08)' },
+          }}
+        >
+          <FaGithub />
+        </IconButton>
+      </Stack>
+    </Stack>
   );
 }
