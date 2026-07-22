@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Box } from '@mui/material';
 
@@ -11,16 +11,31 @@ import WhatsAppFab from './components/common/WhatsAppFab.jsx';
 import BackToTop from './components/common/BackToTop.jsx';
 
 const Home = lazy(() => import('./pages/Home.jsx'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 export default function App() {
   const [booting, setBooting] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     // Give fonts and hero visuals a moment for a polished first impression.
     const timer = setTimeout(() => setBooting(false), 900);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location]);
 
   return (
     <>
@@ -41,6 +56,8 @@ export default function App() {
             >
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-conditions" element={<TermsConditions />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </motion.div>

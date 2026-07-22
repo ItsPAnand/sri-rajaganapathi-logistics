@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdMenu, MdClose, MdDarkMode, MdLightMode, MdArrowOutward } from 'react-icons/md';
+import { useLocation } from 'react-router-dom';
 
 import Logo from '../common/Logo.jsx';
 import { NAV_LINKS } from '../../constants/company.js';
@@ -25,11 +26,17 @@ import { useColorMode } from '../../theme/ThemeProvider.jsx';
 
 export default function Navbar() {
   const theme = useTheme();
+  const location = useLocation();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const { direction, scrolled } = useScrollDirection(12);
   const { mode, toggle } = useColorMode();
   const [open, setOpen] = useState(false);
   const [activeHash, setActiveHash] = useState('#home');
+
+  const normalizeLink = (href) => {
+    if (!href?.startsWith('#')) return href;
+    return location.pathname === '/' ? href : `/${href}`;
+  };
 
   const hidden = direction === 'down' && scrolled && !open;
 
@@ -93,7 +100,7 @@ export default function Navbar() {
             >
               <Box
                 component="a"
-                href="#home"
+                href="/#home"
                 aria-label="Sri Rajaganapathi Logistics — home"
                 sx={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}
               >
@@ -108,7 +115,7 @@ export default function Navbar() {
                       <Box
                         key={link.href}
                         component="a"
-                        href={link.href}
+                        href={normalizeLink(link.href)}
                         sx={{
                           position: 'relative',
                           px: 1.75,
@@ -149,7 +156,7 @@ export default function Navbar() {
                   </IconButton>
 
                   <Button
-                    href="#contact"
+                    href={normalizeLink('#contact')}
                     variant="contained"
                     color="secondary"
                     endIcon={<MdArrowOutward />}
@@ -207,7 +214,7 @@ export default function Navbar() {
               >
                 <ListItemButton
                   component="a"
-                  href={link.href}
+                  href={normalizeLink(link.href)}
                   onClick={() => setOpen(false)}
                   sx={{
                     borderRadius: 2,
@@ -233,7 +240,7 @@ export default function Navbar() {
             size="large"
             variant="contained"
             color="secondary"
-            href="#contact"
+            href={normalizeLink('#contact')}
             onClick={() => setOpen(false)}
             endIcon={<MdArrowOutward />}
           >

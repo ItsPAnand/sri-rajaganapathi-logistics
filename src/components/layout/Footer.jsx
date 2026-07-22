@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { motion } from 'framer-motion';
+import { Link as RouterLink } from 'react-router-dom';
 import { FaInstagram, FaLinkedin, FaWhatsapp, FaCode, FaGithub } from 'react-icons/fa6';
 import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 
@@ -128,9 +129,9 @@ export default function Footer() {
         >
           <span>© {year} {COMPANY.legalName}. All rights reserved.</span>
           <Stack direction="row" spacing={3}>
-            <FooterLink href="#" muted>Privacy Policy</FooterLink>
-            <FooterLink href="#" muted>Terms of Service</FooterLink>
-            <FooterLink href="#contact" muted>Support</FooterLink>
+            <FooterLink href="/privacy-policy" muted>Privacy Policy</FooterLink>
+            <FooterLink href="/terms-conditions" muted>Terms of Service</FooterLink>
+            <FooterLink href="/#contact" muted>Support</FooterLink>
           </Stack>
         </Stack>
 
@@ -152,9 +153,13 @@ function FooterHeading({ children }) {
 }
 
 function FooterLink({ href, children, muted }) {
+  const internalRoute = href?.startsWith('/') && !href.includes('#');
+
   return (
     <MuiLink
-      href={href}
+      component={internalRoute ? RouterLink : 'a'}
+      to={internalRoute ? href : undefined}
+      href={internalRoute ? undefined : href}
       underline="none"
       sx={{
         color: muted ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.78)',
@@ -227,10 +232,11 @@ function DeveloperCredit() {
 
   return (
     <Stack
-      direction={{ xs: 'column', md: 'row' }}
-      justifyContent="space-between"
-      alignItems={{ xs: 'center', md: 'center' }}
-      spacing={2}
+      direction="row"
+      justifyContent="flex-end"
+      alignItems="center"
+      flexWrap="wrap"
+      spacing={0.8}
       sx={{
         color: 'rgba(255,255,255,0.78)',
         fontSize: 14.5,
@@ -239,91 +245,60 @@ function DeveloperCredit() {
       }}
     >
       <Box
-        component={motion.div}
+        component={motion.span}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.24, ease: 'easeOut' }}
-        sx={{ width: '100%' }}
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 0.8,
+          color: 'rgba(255,255,255,0.78)',
+          fontWeight: 500,
+          '&:hover': { color: '#fff' },
+        }}
       >
-        <MuiLink
-          href={developer.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          underline="none"
-          aria-label="Designed and developed by Anand P on LinkedIn"
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: { xs: 'center', md: 'flex-end' },
-            gap: 1,
-            color: 'inherit',
-            fontWeight: 500,
-            transition: 'color 240ms ease',
-            position: 'relative',
-            '&:hover': { color: '#fff' },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              left: 0,
-              bottom: -2,
-              width: '100%',
-              height: 1,
-              background: accent,
-              transform: 'scaleX(0)',
-              transformOrigin: 'left',
-              opacity: 0,
-              transition: 'transform 240ms ease, opacity 240ms ease',
-            },
-            '&:hover::after': {
-              transform: 'scaleX(1)',
-              opacity: 1,
-            },
-          }}
-        >
-          <Box component={FaCode} sx={{ color: accent, fontSize: 16 }} />
-          Crafted with ❤️ by {developer.name}
-        </MuiLink>
+        <Box component={FaCode} sx={{ color: accent, fontSize: 16 }} />
+        Crafted with <Box component="span" sx={{ color: '#fff', fontWeight: 600 }}>❤️</Box> by {developer.name}
       </Box>
 
-      <Stack direction="row" spacing={1} sx={{ justifyContent: { xs: 'center', md: 'flex-end' } }}>
-        <IconButton
-          component={motion.a}
-          href={developer.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn profile for Anand P"
-          whileHover={{ y: -2, scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
-          sx={{
-            color: 'rgba(255,255,255,0.78)',
-            border: '1px solid rgba(255,255,255,0.14)',
-            width: 38,
-            height: 38,
-            '&:hover': { color: '#fff', borderColor: accent, background: 'rgba(245,166,35,0.08)' },
-          }}
-        >
-          <FaLinkedin />
-        </IconButton>
-        <IconButton
-          component={motion.a}
-          href={developer.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub profile for Anand P"
-          whileHover={{ y: -2, scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
-          sx={{
-            color: 'rgba(255,255,255,0.78)',
-            border: '1px solid rgba(255,255,255,0.14)',
-            width: 38,
-            height: 38,
-            '&:hover': { color: '#fff', borderColor: accent, background: 'rgba(245,166,35,0.08)' },
-          }}
-        >
-          <FaGithub />
-        </IconButton>
-      </Stack>
+      <IconButton
+        component={motion.a}
+        href={developer.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn profile for Anand P"
+        whileHover={{ y: -2, scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        sx={{
+          color: 'rgba(255,255,255,0.78)',
+          border: '1px solid rgba(255,255,255,0.14)',
+          width: 38,
+          height: 38,
+          '&:hover': { color: '#fff', borderColor: accent, background: 'rgba(245,166,35,0.08)' },
+        }}
+      >
+        <FaLinkedin />
+      </IconButton>
+      <IconButton
+        component={motion.a}
+        href={developer.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub profile for Anand P"
+        whileHover={{ y: -2, scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        sx={{
+          color: 'rgba(255,255,255,0.78)',
+          border: '1px solid rgba(255,255,255,0.14)',
+          width: 38,
+          height: 38,
+          '&:hover': { color: '#fff', borderColor: accent, background: 'rgba(245,166,35,0.08)' },
+        }}
+      >
+        <FaGithub />
+      </IconButton>
     </Stack>
   );
 }
